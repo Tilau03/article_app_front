@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom';
 import { Peticion } from '../../helpers/Peticion';
 import { Global } from '../../helpers/Global';
 import { Link } from 'react-router-dom';
+import { ArticulosContext } from '../../contexts/Articulos';
+
 
 
 export const Articulo = () => {
@@ -11,6 +13,7 @@ export const Articulo = () => {
   const [articulo, setArticulo] = useState({});
   const [cargando, setCargando] = useState(true);
   const params = useParams();
+  const {eliminar}= useContext(ArticulosContext)
 
 
   useEffect(() => {
@@ -40,7 +43,9 @@ export const Articulo = () => {
           <span>Date: {articulo.fecha}</span>
           <p>{articulo.contenido}</p>
 
-          
+          <Link to={"/Editar/" + articulo._id} className="edit">Edit</Link>
+          <button className="delete" onClick={() => eliminar(articulo._id)}>Delete</button>
+
 
         </>
       }

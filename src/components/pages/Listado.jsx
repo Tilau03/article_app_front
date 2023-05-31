@@ -6,16 +6,9 @@ import { ArticulosContext } from '../../contexts/Articulos';
 import { useContext } from 'react';
 
 export const Listado = () => {
-  const {articulos, setArticulos} = useContext(ArticulosContext)
+  const {articulos} = useContext(ArticulosContext)
 
-  const eliminar = async (id) => {
-    let { datos } = await Peticion(Global.url + "articulo/" + id, "DELETE");
-
-    if (datos.status === "success") {
-      let articulosActualizados = Articulos.filter(articulo => articulo._id !== id);
-      setArticulos(articulosActualizados);
-    }
-  }
+ 
 
   return (
     articulos.map(articulo => {
@@ -31,9 +24,7 @@ export const Listado = () => {
             <h3 className="title"><Link to={"/articulo/" + articulo._id}>{articulo.titulo}</Link></h3>
             <p className="description">{articulo.contenido}</p>
 
-            <Link to={"/Editar/" + articulo._id} className="edit">Edit</Link>
-            <button className="delete" onClick={() => eliminar(articulo._id)}>Delete</button>
-
+          
           </div>
         </article>
       );
