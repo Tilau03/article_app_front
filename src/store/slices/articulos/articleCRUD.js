@@ -1,4 +1,3 @@
-import { Peticion } from "../../../helpers/Peticion";
 import { Global } from "../../../helpers/Global";
 import axios from "axios";
 

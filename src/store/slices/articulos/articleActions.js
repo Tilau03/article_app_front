@@ -12,5 +12,7 @@ export const addNewArticle = (article) => (disptach)=>{
  return addArticleAPI(article).then((res)=>{
     const {data} = res
     disptach(addArticle(data.articulo))
+
+    return data.articulo
 })
 }

@@ -1,26 +1,21 @@
-import { useState, useContext } from "react";
-import { Peticion } from "../../helpers/Peticion";
+import { useState } from "react";
+//import { Peticion } from "../../helpers/Peticion";
 import { Global } from "../../helpers/Global";
-import { UseForm } from "../../hooks/UseForm";
 
-import { ArticulosContext } from "../../contexts/Articulos";
-import { useDispatch } from "react-redux"
-import {addNewArticle} from "../../store/slices/articulos/articleActions"
+//import { useDispatch } from "react-redux"
+//import {addNewArticle} from "../../store/slices/articulos/articleActions"
+import axios from "axios";
 
 export const Crear = () => {
   ///OLD
-  const { formulario, enviado, cambiado } = UseForm({});
-  const [resultado, setResultado] = useState("no_enviado");
-  const { articulos, setArticulos } = useContext(ArticulosContext);
   //NEW
   const [formState, setFormState] = useState({
-  titulo:"",
-  contenido:"",
-  file0:""
+    titulo: "",
+    contenido: "",
   });
-  const [file, setFile] = useState(null)
+  const [file, setFile] = useState(null);
 
-  const dispatch = useDispatch()
+  // const dispatch = useDispatch()
 
   const handleFileChange = ({ target }) => {
     setFile(target.files[0]);
@@ -36,16 +31,28 @@ export const Crear = () => {
   const guardarArticulo = async (e) => {
     e.preventDefault();
 
-   const data = dispatch(addNewArticle(formState))
-   
-    const fileInput = document.querySelector("#file");
+    const formData = new FormData();
+    
+    formData.append("file0", file);
+    formData.append("data", JSON.stringify(formState));
 
-    if (file) {
+    axios.post(Global.url + "crear", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    //const data = dispatch(addNewArticle(formState))
+
+    //console.log(data)
+    /* if (file) {
         const formData = new FormData();
         formData.append('file0',file);
 
+        axios.post("")
+
         const subida = await Peticion(
-        Global.url + "subir-imagen/" + formState.titulo,
+        Global.url + "subir-imagen/" + data._id,
         "POST",
         formData,
         true
@@ -56,34 +63,52 @@ export const Crear = () => {
       } else {
         setResultado("error");
       }
-    } 
+    }  */
   };
 
   return (
-    <div className="jumbo">
+    <div className='jumbo'>
       <h1>Create Article</h1>
       <p>Form to create article</p>
 
-      <strong>{resultado == "guardado" ? "Saved Article!" : ""}</strong>
+      {/* <strong>{resultado == "guardado" ? "Saved Article!" : ""}</strong>
       <strong>{resultado == "error" ? "Incorrect Data!" : ""}</strong>
-
-      <form className="formulario" onSubmit={guardarArticulo}>
-        <div className="form-group">
-          <label htmlFor="titulo">Title</label>
-          <input type="text" required name="titulo" onChange={handleChange} value={formState.titulo}/>
+ */}
+      <form className='formulario' onSubmit={guardarArticulo}>
+        <div className='form-group'>
+          <label htmlFor='titulo'>Title</label>
+          <input
+            type='text'
+            required
+            name='titulo'
+            onChange={handleChange}
+            value={formState.titulo}
+          />
         </div>
 
-        <div className="form-group">
-          <label htmlFor="contenido">Content</label>
-          <textarea type="text" required name="contenido" onChange={handleChange} value={formState.contenido}/>
+        <div className='form-group'>
+          <label htmlFor='contenido'>Content</label>
+          <textarea
+            type='text'
+            required
+            name='contenido'
+            onChange={handleChange}
+            value={formState.contenido}
+          />
         </div>
 
-        <div className="form-group">
-          <label htmlFor="file0">Image</label>
-          <input type="file" required name="file0" id="file" onChange={handleFileChange} />
+        <div className='form-group'>
+          <label htmlFor='file0'>Image</label>
+          <input
+            type='file'
+            required
+            name='file0'
+            id='file'
+            onChange={handleFileChange}
+          />
         </div>
 
-        <input type="submit" value="Save" className="btn btn-success" />
+        <input type='submit' value='Save' className='btn btn-success' />
       </form>
     </div>
   );
