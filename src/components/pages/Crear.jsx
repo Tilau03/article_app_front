@@ -1,43 +1,51 @@
-import React, { useContext } from "react";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Peticion } from "../../helpers/Peticion";
 import { Global } from "../../helpers/Global";
 import { UseForm } from "../../hooks/UseForm";
+
 import { ArticulosContext } from "../../contexts/Articulos";
+import { useDispatch } from "react-redux"
+import {addNewArticle} from "../../store/slices/articulos/articleActions"
 
 export const Crear = () => {
+  ///OLD
   const { formulario, enviado, cambiado } = UseForm({});
   const [resultado, setResultado] = useState("no_enviado");
   const { articulos, setArticulos } = useContext(ArticulosContext);
+  //NEW
+  const [formState, setFormState] = useState({
+  titulo:"",
+  contenido:"",
+  file0:""
+  });
+  const [file, setFile] = useState(null)
+
+  const dispatch = useDispatch()
+
+  const handleFileChange = ({ target }) => {
+    setFile(target.files[0]);
+  };
+
+  const handleChange = ({ target }) => {
+    setFormState((formState) => ({
+      ...formState,
+      [target.name]: target.value,
+    }));
+  };
 
   const guardarArticulo = async (e) => {
     e.preventDefault();
 
-    let nuevoArticulo = formulario;
-
-    const { datos } = await Peticion(
-      Global.url + "crear",
-      "POST",
-      nuevoArticulo
-    );
-
-    if (datos.status === "success") {
-      setResultado("guardado");
-      setArticulos([nuevoArticulo, ...articulos]);
-    } else {
-      setResultado("error");
-    }
-
+   const data = dispatch(addNewArticle(formState))
+   
     const fileInput = document.querySelector("#file");
 
-    if (datos.status === "success" && fileInput.files[0]) {
-      setResultado("guardado");
+    if (file) {
+        const formData = new FormData();
+        formData.append('file0',file);
 
-      const formData = new FormData();
-      formData.append("file0", fileInput.files[0]);
-
-      const subida = await Peticion(
-        Global.url + "subir-imagen/" + datos.articulo._id,
+        const subida = await Peticion(
+        Global.url + "subir-imagen/" + formState.titulo,
         "POST",
         formData,
         true
@@ -48,7 +56,7 @@ export const Crear = () => {
       } else {
         setResultado("error");
       }
-    }
+    } 
   };
 
   return (
@@ -62,17 +70,17 @@ export const Crear = () => {
       <form className="formulario" onSubmit={guardarArticulo}>
         <div className="form-group">
           <label htmlFor="titulo">Title</label>
-          <input type="text" name="titulo" onChange={cambiado} />
+          <input type="text" required name="titulo" onChange={handleChange} value={formState.titulo}/>
         </div>
 
         <div className="form-group">
           <label htmlFor="contenido">Content</label>
-          <textarea type="text" name="contenido" onChange={cambiado} />
+          <textarea type="text" required name="contenido" onChange={handleChange} value={formState.contenido}/>
         </div>
 
         <div className="form-group">
           <label htmlFor="file0">Image</label>
-          <input type="file" name="file0" id="file" />
+          <input type="file" required name="file0" id="file" onChange={handleFileChange} />
         </div>
 
         <input type="submit" value="Save" className="btn btn-success" />

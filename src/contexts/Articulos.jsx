@@ -15,13 +15,17 @@ export const ArticulosProvider = ({ children }) => {
   }, []);
 
   const conseguirArticulos = async () => {
-    const { datos, cargando } = await Peticion(Global.url + "articulos", "GET");
+    const { datos, cargando } = await Peticion(
+      Global.url + "articulos/",
+      "GET"
+    );
 
     if (datos.status === "success") {
       setArticulos(datos.articulos);
     }
     setCargando(false);
   };
+
   const eliminar = async (id) => {
     let { datos } = await Peticion(Global.url + "articulo/" + id, "DELETE");
 
@@ -35,7 +39,13 @@ export const ArticulosProvider = ({ children }) => {
   };
   return (
     <ArticulosContext.Provider
-      value={{ articulos, cargando, setArticulos, eliminar }}
+      value={{
+        articulos,
+        cargando,
+        setArticulos,
+        eliminar,
+        conseguirArticulos,
+      }}
     >
       {children}
     </ArticulosContext.Provider>

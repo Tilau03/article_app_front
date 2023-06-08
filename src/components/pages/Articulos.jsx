@@ -1,23 +1,23 @@
-
-import { useState, useEffect, useContext} from 'react'
-import { Peticion } from '../../helpers/Peticion';
-import { Global } from '../../helpers/Global';
-import { Listado } from './Listado';
-import { ArticulosContext } from '../../contexts/Articulos';
+import { useState, useEffect, useContext } from "react";
+import { Peticion } from "../../helpers/Peticion";
+import { Global } from "../../helpers/Global";
+import { Listado } from "./Listado";
+import { ArticulosContext } from "../../contexts/Articulos";
+import { showAllArticles } from "../../store/slices/articulos/articleActions";
+import { useDispatch, useSelector } from "react-redux";
 
 export const Articulos = () => {
-const {articulos, cargando} = useContext(ArticulosContext)
+  const dispatch = useDispatch();
 
- 
+  const articles = useSelector((state) => state.articles.articleList);
+
+  useEffect(() => {
+    dispatch(showAllArticles());
+  }, []);
+
   return (
     <>
-      {cargando ? "Cargando..." :
-
-        articulos.length >= 1 ? <Listado/> : <h1>There are no article</h1>
-      }
-
-
+        <Listado articles={articles} />
     </>
-
-  )
-}
+  );
+};

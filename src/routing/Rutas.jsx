@@ -12,40 +12,37 @@ import { Busqueda } from "../components/pages/Busqueda";
 import { Editar } from "../components/pages/Editar";
 import { ArticulosProvider } from "../contexts/Articulos";
 
-
-
 export const Rutas = () => {
-    return (
-        <BrowserRouter>
+  return (
+    <BrowserRouter>
+      <Header />
+      <Nav />
 
-            <Header />
-            <Nav />
+      <section id="content" className="content">
+        <ArticulosProvider>
+          <Routes>
+            <Route path="/" element={<Inicio />} />
+            <Route path="/inicio" element={<Inicio />} />
+            <Route path="/articulos" element={<Articulos />} />
+            <Route path="/crear" element={<Crear />} />
+            <Route path="/buscar/:busqueda" element={<Busqueda />} />
+            <Route path="/articulo/:id" element={<Articulo />} />
+            <Route path="/editar/:id" element={<Editar />} />
 
-            <section id="content" className="content">
-            <ArticulosProvider>
-                <Routes>
-                  
-                        <Route path="/" element={<Inicio />} />
-                        <Route path="/inicio" element={<Inicio />} />
-                        <Route path="/articulos" element={<Articulos />} />
-                        <Route path="/crear" element={<Crear />} />
-                        <Route path="/buscar/:busqueda" element={<Busqueda />} />
-                        <Route path="/articulo/:id" element={<Articulo />} />
-                        <Route path="/editar/:id" element={<Editar />} />
+            <Route
+              path="*"
+              element={
+                <div className="jumbo">
+                  <h1>Error 404 </h1>
+                </div>
+              }
+            />
+          </Routes>
+        </ArticulosProvider>
+      </section>
 
-                        <Route path="*" element={
-                            <div className="jumbo">
-                                <h1>Error 404 </h1>
-                            </div>
-                        } />
-                
-                </Routes>
-                </ArticulosProvider>
-            </section>
-
-            <Sidebar />
-            <Footer />
-
-        </BrowserRouter>
-    )
-}
+      <Sidebar />
+      <Footer />
+    </BrowserRouter>
+  );
+};

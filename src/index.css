@@ -192,14 +192,14 @@ input[type="button"],
   transition: all 300ms;
 }
 
-.articulo-item .edit:hover{
+.jumbo .edit:hover{
   background: #e77b00;
 }
-.articulo-item .edit{
+.jumbo .edit{
   margin-right: 20px;
 }
 
-.articulo-item .delete:hover{
+.jumbo .delete:hover{
   background: #9b0202;
 }
 

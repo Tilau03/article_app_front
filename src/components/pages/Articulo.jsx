@@ -13,7 +13,7 @@ export const Articulo = () => {
   const [articulo, setArticulo] = useState({});
   const [cargando, setCargando] = useState(true);
   const params = useParams();
-  const {eliminar}= useContext(ArticulosContext)
+  const {eliminar} = useContext(ArticulosContext);
 
 
   useEffect(() => {
